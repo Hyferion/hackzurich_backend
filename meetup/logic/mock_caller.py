@@ -1,4 +1,5 @@
 from traveltime_client import get_overlap
+from gmaps_client import get_nearby_places
 from polygon_maths import fit_circle
 
 
@@ -22,30 +23,34 @@ def filter_results(results, search_id):
     return new_results
 
 
+def reverse_coord_order(coord):
+    return [coord[1], coord[0]]
+
+
 departure_searches = [
     {
-        "id": "A",
-        "coords": {
-            "lat": 51.507609,
-            "lng": -0.128315
+        'id': 'A',
+        'coords': {
+            'lat': 51.507609,
+            'lng': -0.128315
         },
-        "transportation": {
-            "type": "public_transport"
+        'transportation': {
+            'type': 'public_transport'
         },
-        "departure_time": "2019-09-27T08:00:00Z",
-        "travel_time": 900
+        'departure_time': '2019-09-27T08:00:00Z',
+        'travel_time': 900
     },
     {
-        "id": "B",
-        "coords": {
-            "lat": 51.510918,
-            "lng": -0.117268
+        'id': 'B',
+        'coords': {
+            'lat': 51.510918,
+            'lng': -0.117268
         },
-        "transportation": {
-            "type": "walking"
+        'transportation': {
+            'type': 'walking'
         },
-        "departure_time": "2019-09-27T08:00:00Z",
-        "travel_time": 600
+        'departure_time': '2019-09-27T08:00:00Z',
+        'travel_time': 600
     }
 ]
 
@@ -54,10 +59,7 @@ overlap = filter_results(results, 'overlap')
 
 overlap_pairs = get_pairs(overlap[0]['shapes'][0]['shell'])
 
-print(fit_circle(overlap_pairs))
+centroid, radius = fit_circle(overlap_pairs)
 
-
-# overlap_string = get_string(overlap_pairs)
-
-# print('overlap')
-# print(overlap_string)
+print(get_nearby_places(reverse_coord_order(
+    centroid), radius, 'restaurant').json())
