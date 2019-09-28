@@ -74,3 +74,6 @@ fi
 if [ -n "$BASH" -o -n "$ZSH_VERSION" ] ; then
     hash -r
 fi
+
+# Environment variables
+source ./.env
