@@ -1,4 +1,5 @@
 from traveltime_client import get_overlap
+from polygon_maths import fit_circle
 
 
 def unwrap_coords(response, coords_id):
@@ -6,7 +7,7 @@ def unwrap_coords(response, coords_id):
 
 
 def get_pairs(coords):
-    return [[str(item['lng']), str(item['lat'])] for item in coords]
+    return [[item['lng'], item['lat']] for item in coords]
 
 
 def get_string(pairs):
@@ -52,7 +53,11 @@ results = get_overlap(departure_searches).json()['results']
 overlap = filter_results(results, 'overlap')
 
 overlap_pairs = get_pairs(overlap[0]['shapes'][0]['shell'])
-overlap_string = get_string(overlap_pairs)
 
-print('overlap')
-print(overlap_string)
+print(fit_circle(overlap_pairs))
+
+
+# overlap_string = get_string(overlap_pairs)
+
+# print('overlap')
+# print(overlap_string)

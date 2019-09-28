@@ -12,14 +12,13 @@ def record_departure_search_ids(departure_searches):
     return search_ids
 
 
-"""
-Takes in a list with any number of lat-long pairs (departure_searches),
-formats a call to the Travel Time multi-origin API,
-and returns the intersection of the travel regions.
-"""
-
-
 def get_overlap(departure_searches):
+    """
+    Takes in a list with any number of lat-long pairs (departure_searches),
+    formats a call to the Travel Time multi-origin API,
+    and returns the intersection of the travel regions.
+    """
+
     departure_search_ids = record_departure_search_ids(departure_searches)
 
     response = requests.post(
