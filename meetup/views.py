@@ -71,7 +71,7 @@ class RoomList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
         queryset = Room.objects.all()
         user = self.request.query_params.get('user', None)
         if user is not None:
-            querysetowner = Room.objects.filter(creator=user)
+            querysetowner = Room.objects.filter(owner=user)
             querysetmember = Room.objects.filter(members=user)
             return querysetowner | querysetmember
         return queryset
@@ -124,7 +124,7 @@ def add_member_to_room(request):
             return Response(status.HTTP_400_BAD_REQUEST)
 
         room = Room.objects.get(identifier=identifier)
-        user = User.objects.get(id=user)
+        user = UserInstance.objects.get(userid=user)
 
         room.members.add(user)
         room.save()

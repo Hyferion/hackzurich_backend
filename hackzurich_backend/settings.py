@@ -24,7 +24,7 @@ SECRET_KEY = '!wjrahb)_sxle(kk4$=ls@k3%sw-8xx47vl5vk7@gdeg7!5mh5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1", "10.0.2.2"]
 
 # Application definition
 

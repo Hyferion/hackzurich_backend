@@ -10,7 +10,7 @@ class User(models.Model):
 
 
 class UserInstance(models.Model):
-    userid = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
+    userid = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     lat = models.FloatField()
     lng = models.FloatField()
     last_update = models.DateTimeField(auto_now=True)
@@ -23,7 +23,7 @@ class UserPreferences(models.Model):
 
 class Room(models.Model):
     identifier = models.CharField(max_length=255, primary_key=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(UserInstance, on_delete=models.CASCADE)
     members = models.ManyToManyField(
         UserInstance, null=True, blank=True, related_name="members")
     name = models.CharField(max_length=255)
