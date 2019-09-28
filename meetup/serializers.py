@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from meetup.models import User, UserInstance, Room
+from meetup.models import User, UserInstance, Room, Meetup
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,3 +20,9 @@ class RoomSerializer(serializers.ModelSerializer):
         model = Room
         fields = ('identifier', 'name', 'owner', 'created_at', 'members')
         read_only_fields = ('identifier',)
+
+
+class MeetupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Meetup
+        fields = ('lat', 'lng', 'name', 'type')

@@ -15,4 +15,4 @@ def get_nearby_places(centroid, radius, type):
         }
     )
 
-    return response
+    return response.json()

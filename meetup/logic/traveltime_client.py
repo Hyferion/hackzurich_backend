@@ -12,6 +12,18 @@ def record_departure_search_ids(departure_searches):
     return search_ids
 
 
+def filter_results(results, search_id):
+    new_results = []
+    for item in results:
+        if item['search_id'] == search_id:
+            new_results.append(item)
+    return new_results
+
+
+def get_pairs(coords):
+    return [[item['lng'], item['lat']] for item in coords]
+
+
 def get_overlap(departure_searches):
     """
     Takes in a list with any number of lat-long pairs (departure_searches),
@@ -38,5 +50,7 @@ def get_overlap(departure_searches):
             ]
         }
     )
+    results = response.json()['results']
+    overlap = filter_results(results, 'overlap')
 
-    return response
+    return get_pairs(overlap[0]['shapes'][0]['shell'])

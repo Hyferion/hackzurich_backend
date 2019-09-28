@@ -9,5 +9,8 @@ urlpatterns = [
     path('room/<str:pk>/', views.RoomDetail.as_view(), name='roomDetail'),
     path('addmember/', views.add_member_to_room, name='addMember'),
     path('userinstance/', views.UserInstanceList.as_view(), name='userInstance'),
-    path('userinstance/<int:pk>', views.UserInstanceDetail.as_view(), name='userInstanceDetail')
+    path('userinstance/<int:pk>', views.UserInstanceDetail.as_view(),
+         name='userInstanceDetail'),
+    path('submitmeetup', views.submit_meetup, name='submitMeetup'),
+    path('meetups/', views.MeetupList.as_view(), name='meetupList')
 ]

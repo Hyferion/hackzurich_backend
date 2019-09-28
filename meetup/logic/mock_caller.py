@@ -15,14 +15,6 @@ def get_string(pairs):
     return '\n'.join([','.join(i) for i in pairs])
 
 
-def filter_results(results, search_id):
-    new_results = []
-    for item in results:
-        if item['search_id'] == search_id:
-            new_results.append(item)
-    return new_results
-
-
 def reverse_coord_order(coord):
     return [coord[1], coord[0]]
 
@@ -54,12 +46,9 @@ departure_searches = [
     }
 ]
 
-results = get_overlap(departure_searches).json()['results']
-overlap = filter_results(results, 'overlap')
-
-overlap_pairs = get_pairs(overlap[0]['shapes'][0]['shell'])
+overlap_pairs = get_overlap(departure_searches)
 
 centroid, radius = fit_circle(overlap_pairs)
 
 print(get_nearby_places(reverse_coord_order(
-    centroid), radius, 'restaurant').json())
+    centroid), radius, 'restaurant')
