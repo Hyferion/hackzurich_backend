@@ -71,9 +71,8 @@ class RoomList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
         queryset = Room.objects.all()
         user = self.request.query_params.get('user', None)
         if user is not None:
-            querysetowner = Room.objects.filter(owner=user)
             querysetmember = Room.objects.filter(members=user)
-            return querysetowner | querysetmember
+            return querysetmember
         return queryset
 
     def get(self, request, *args, **kwargs):
@@ -139,10 +138,10 @@ def format_members(members):
                                    'coords': {
                                        'lat': member.lat,
                                        'lng': member.lng
-                                   },
-                                   'transportation': {"type": 'public_transport'},
-                                   'departure_time': '2019-09-27T08:00:00Z',
-                                   'travel_time': 900})
+        },
+            'transportation': {"type": 'public_transport'},
+            'departure_time': '2019-09-27T08:00:00Z',
+            'travel_time': 900})
     return departure_searches
 
 
