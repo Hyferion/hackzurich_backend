@@ -9,9 +9,9 @@ from rest_framework.response import Response
 from meetup.models import User, Room, UserInstance, Meetup
 from meetup.serializers import UserSerializer, RoomSerializer, UserInstanceSerializer, MeetupSerializer
 
-from logic.traveltime_client import get_overlap
-from logic.polygon_maths import fit_circle
-from logic.gmaps_client import get_nearby_places
+from meetup.logic.traveltime_client import get_overlap
+from meetup.logic.polygon_maths import fit_circle
+from meetup.logic.gmaps_client import get_nearby_places
 
 
 class UserList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
@@ -81,10 +81,10 @@ class RoomList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericA
 
     def post(self, request, *args, **kwargs):
         serializer = RoomSerializer(data=request.data)
-        playlistIdentifier = randomStringDigits()
+        roomidentifier = randomStringDigits()
 
         serializer.is_valid(raise_exception=True)
-        serializer.save(identifier=playlistIdentifier)
+        serializer.save(identifier=roomidentifier)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -103,7 +103,7 @@ class MeetupList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generi
     serializer_class = MeetupSerializer
 
     def get_queryset(self):
-        queryset = Room.objects.all()
+        queryset = Meetup.objects.all()
         room = self.request.query_params.get('room', None)
         if room is not None:
             querysetroom = Meetup.objects.filter(room_id=room)
@@ -135,12 +135,12 @@ def add_member_to_room(request):
 def format_members(members):
     departure_searches = []
     for member in members:
-        departure_searches.append({'id': member.userid,
+        departure_searches.append({'id': str(member.userid_id),
                                    'coords': {
                                        'lat': member.lat,
                                        'lng': member.lng
                                    },
-                                   'transportation': 'public_transport',
+                                   'transportation': {"type": 'public_transport'},
                                    'departure_time': '2019-09-27T08:00:00Z',
                                    'travel_time': 900})
     return departure_searches
@@ -164,7 +164,7 @@ def submit_meetup(request):
         room = Room.objects.get(identifier=room_identifier)
 
         # get all members of room
-        members = room.members
+        members = room.members.all()
 
         # put members' locations in correct format
         departure_searches = format_members(members)
@@ -180,11 +180,17 @@ def submit_meetup(request):
             reverse_coord_order(centroid), radius, category)
 
         # pick the top place
-        place = places[0]
+        place = places['results'][0]
 
         # create meetup
         location = place['geometry']['location']
-        meetup = Meetup.objects.create(room_id=room_identifier,
+
+        r = Room.objects.get(identifier=room_identifier)
+
+        meetup = Meetup.objects.create(room_id=r,
                                        lat=location['lat'], lng=location['lng'], name=place['name'], type=category)
 
-        return Response(status.HTTP_200_OK)
+        serializer = MeetupSerializer(meetup)
+
+        print(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)

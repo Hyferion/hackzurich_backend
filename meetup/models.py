@@ -25,7 +25,7 @@ class Room(models.Model):
     identifier = models.CharField(max_length=255, primary_key=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     members = models.ManyToManyField(
-        User, null=True, blank=True, related_name="members")
+        UserInstance, null=True, blank=True, related_name="members")
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
 

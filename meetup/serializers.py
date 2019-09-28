@@ -25,4 +25,4 @@ class RoomSerializer(serializers.ModelSerializer):
 class MeetupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Meetup
-        fields = ('lat', 'lng', 'name', 'type')
+        fields = ('room_id','lat', 'lng', 'name', 'type')

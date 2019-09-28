@@ -12,5 +12,5 @@ urlpatterns = [
     path('userinstance/<int:pk>', views.UserInstanceDetail.as_view(),
          name='userInstanceDetail'),
     path('submitmeetup', views.submit_meetup, name='submitMeetup'),
-    path('meetups/', views.MeetupList.as_view(), name='meetupList')
+    path('meetup/', views.MeetupList.as_view(), name='meetupList')
 ]
