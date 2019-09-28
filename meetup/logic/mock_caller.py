@@ -1,4 +1,4 @@
-from gmaps_api import get_overlap
+from traveltime_client import get_overlap
 
 
 def unwrap_coords(response, coords_id):
@@ -21,8 +21,35 @@ def filter_results(results, search_id):
     return new_results
 
 
-results = get_overlap().json()['results']
-overlap = filter_results(results, 'A/B')
+departure_searches = [
+    {
+        "id": "A",
+        "coords": {
+            "lat": 51.507609,
+            "lng": -0.128315
+        },
+        "transportation": {
+            "type": "public_transport"
+        },
+        "departure_time": "2019-09-27T08:00:00Z",
+        "travel_time": 900
+    },
+    {
+        "id": "B",
+        "coords": {
+            "lat": 51.510918,
+            "lng": -0.117268
+        },
+        "transportation": {
+            "type": "walking"
+        },
+        "departure_time": "2019-09-27T08:00:00Z",
+        "travel_time": 600
+    }
+]
+
+results = get_overlap(departure_searches).json()['results']
+overlap = filter_results(results, 'overlap')
 
 overlap_pairs = get_pairs(overlap[0]['shapes'][0]['shell'])
 overlap_string = get_string(overlap_pairs)
